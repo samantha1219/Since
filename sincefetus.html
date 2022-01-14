@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Since Fetus</title>
+    
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-proxy-event-component/dist/aframe-proxy-event-component.min.js"></script>
+    <script src="scripts/aframe-render-order-component.js"></script>
+    <script src="scripts/aframe-change-scene.js"></script>
+    <script src="scripts/aframe-draw-shader.js"></script>
+    <script src="scripts/aframe-attach-to.js"></script>
+    <script src="scripts/aframe-video-player.js"></script>
+    <script src="scripts/aframe-chromakey-material.js"></script>
+    <script src="https://unpkg.com/aframe-play-sound-on-event@1.0.2/dist/aframe-play-sound-on-event.min.js"></script>
+    <script src="https://unpkg.com/aframe-extras@6.1.1/dist/aframe-extras.js"></script>
+    <script src="scripts/aframe-maze.js"></script>
+    <script src="scripts/aframe-move-to.js"></script>
+
+</head>
+
+<script>
+    AFRAME.registerComponent('audiohandler1', {
+        init: function() {
+        let playing = true;
+        let audio1 = document.querySelector("#fetusBGM");
+        let audio2 = document.querySelector("#babyhoodBGM");
+        let audio3 = document.querySelector("#eyeBGM");
+        audio1.play();
+        this.el.addEventListener('click', () => {
+            if (playing) {
+            audio1.pause();
+            audio2.play();
+            audio3.pause();
+            } 
+        });
+        }
+    })
+</script> 
+<script>
+    AFRAME.registerComponent('audiohandler2', {
+        init: function() {
+        let playing = true;
+        let audio1 = document.querySelector("#fetusBGM");
+        let audio2 = document.querySelector("#babyhoodBGM");
+        let audio3 = document.querySelector("#eyeBGM");
+        // audio2.play();
+        this.el.addEventListener('click', () => {
+            if (playing) {
+            audio1.pause();
+            audio2.pause();
+            audio3.play();
+            } 
+        });
+        }
+    })
+</script> 
+<script>
+    AFRAME.registerComponent('audiohandler3', {
+        init: function() {
+        let playing = true;
+        let audio1 = document.querySelector("#fetusBGM");
+        let audio2 = document.querySelector("#babyhoodBGM");
+        let audio3 = document.querySelector("#eyeBGM");
+        // audio3.play();
+        this.el.addEventListener('click', () => {
+            if (playing) {
+            audio1.play();
+            audio2.pause();
+            audio3.pause();
+            } 
+        });
+        }
+    })
+</script> 
+<script>
+    AFRAME.registerComponent('look', {
+        init: function() {
+            var row=18;
+            var col= 18;
+            var t=10;
+            // var box=[];
+            for(var i=0;i<row;i++){
+                // box[i]=[];
+                for(var j=0;j<col;j++){
+                    box= document.createElement("a-video");
+                    cover= document.createElement("a-plane");
+                    // box[i][j]= document.createElement("a-video");
+                    var theta = 2* Math.PI * i /(row-1);
+                    var phi = Math.PI * j / (col-1);
+                    box.setAttribute("src","#eyevideo");
+                    box.setAttribute("class", "box" );
+                    box.setAttribute("position", getPosition());
+                    box.setAttribute("rotation", getRotation());
+                    box.setAttribute('height', '1.75');
+                    box.setAttribute('width', '3');
+                    box.setAttribute("chromakey", "color: 0 0 0 ; range: 0.001");   
+                    box.setAttribute("visible",true);
+                    cover.setAttribute("raycastable",true)
+                    cover.setAttribute("position", getPosition1());
+                    cover.setAttribute("rotation", getRotation());
+                    cover.setAttribute("color","black");
+                    cover.setAttribute("height","1.75");
+                    cover.setAttribute("width","1.9");
+
+                    document.querySelector("#scene4").appendChild(box);
+                    document.querySelector("#scene4").appendChild(cover);
+                    // document.querySelector("a-scene").appendChild(box);
+                    cover.addEventListener("mouseenter", function() {
+                        
+                        var colour = this.getAttribute("color");
+                        this.setAttribute("org-color", colour)
+                        if(colour=="black"){
+                            // this.setAttribute("color", "white");
+                            this.setAttribute("visible",false);
+                        } 
+                        else{
+                            this.setAttribute("color", "black");
+                            this.setAttribute("visible",false);
+                        }
+                    }
+                    )
+                }
+            }
+            function getPosition() {
+                if(j==0){
+                    return `${0} ${t} ${0}`;
+                }
+                else if(j==col-1){
+                    return `${0} ${-t} ${0}`;
+                }
+                else if(i==0||i==row-1){
+                    return `${0} ${Math.cos(phi)*t} ${Math.sin(phi)*t}`;
+                }
+                else{
+                    return `${Math.sin(theta) * Math.sin(phi)*t} ${Math.cos(phi)*t} ${Math.cos(theta) * Math.sin(phi)*t}`;
+                }
+            }
+            function getPosition1() {
+                var t=8;
+                if(j==0){
+                    return `${0} ${t} ${0}`;
+                }
+                else if(j==col-1){
+                    return `${0} ${-t} ${0}`;
+                }
+                else if(i==0||i==row-1){
+                    return `${0} ${Math.cos(phi)*t} ${Math.sin(phi)*t}`;
+                }
+                else{
+                    return `${Math.sin(theta) * Math.sin(phi)*t} ${Math.cos(phi)*t} ${Math.cos(theta) * Math.sin(phi)*t}`;
+                }
+            }
+            function getRotation() {
+                return `${(-10)*(j-9)} ${(20)*(i-9)} ${0}`;
+            }
+            }})
+</script>
+
+
+<body>
+    <a-scene renderer="colorManagement: true">
+        
+        <a-assets>
+            <img id="blood" crossorigin="anonymous" src="/images/bloodv2.png">
+            <img id="babyhood" crossorigin="anonymous" src="/images/baby123.png">
+            <img id="title" crossorigin="anonymous" src="/images/titleword.png">
+            <video id="bloodv" preload="auto" autoplay loop src="./videos/bloodv.mp4" crossOrigin="">
+            <video id="eyevideo" preload="auto" autoplay loop src="./videos/eye1.mp4" crossOrigin="">
+            <audio id="babyhoodBGM" preload src="audios/babyhoodmusic.mp3" loop></audio>
+            <audio id="fetusBGM" preload src ="audios/Fetus music.mp3" loop  ></audio>
+            <audio id="click-se" preload src="audios/click.ogg"></audio>
+            <audio id="eyeBGM" preload src="audios/eyemusic nodrum.mp3"></audio>
+            <img id="groundTexture" src="https://cdn.aframe.io/a-painter/images/floor.jpg">
+            <img id="skyTexture" src="https://cdn.aframe.io/a-painter/images/sky.jpg">
+        </a-assets>
+
+        <a-camera>
+            <a-cursor   raycaster="objects: [visible=true] [raycastable=true]"
+                        cursor="fuse: true; fuseTimeout: 1000" 
+                        >
+                    </a-cursor>
+
+            <a-sky id="fadePanel" render-order="9999" radius="0.3" color="#000" material="transparent: true; opacity: 0.0;"
+                animation__fadeOut="property: material.opacity; startEvents: fadeOut; easing: linear; dur: 500; to: 1.0"
+                animation__fadeIn="property: material.opacity; startEvents: fadeIn; easing: linear; dur: 500; to: 0.0"
+            ></a-sky>
+        </a-camera>
+        
+        <a-entity 
+            id="scene1" 
+            scene visible="true" 
+        >
+            <a-sky src="#title"></a-sky>
+
+            <a-plane color="#0f0" position="0 0 -12" raycastable="true"
+                    change-scene="event: click; to: #scene2; fadePanel: #fadePanel;"
+                    fuse-button="color: #64363C; barColor:#64363C; fuseTimeout: 1000;" 
+                    width="3"  raycastable="true"
+                    sound="src:#click-se; positional:false; on: click;">
+                    <a-plane draw-text="text:開始體驗; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane>
+
+            <a-plane color="#0f0" position="-12 0 0" raycastable="true"
+                    change-scene="event: click; to: #scene2; fadePanel: #fadePanel;"
+                    fuse-button="color: #64363C; barColor:#64363C; fuseTimeout: 1000;" 
+                    width="3"  raycastable="true"
+                    rotation="0 90 0"
+                    sound="src:#click-se; positional:false; on: click;">
+                    <a-plane draw-text="text:開始體驗; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane>
+
+            <a-plane color="#0f0" position="12 0 0" raycastable="true"
+                    change-scene="event: click; to: #scene2; fadePanel: #fadePanel;"
+                    fuse-button="color: #64363C; barColor:#64363C; fuseTimeout: 1000;" 
+                    width="3"  raycastable="true"
+                    rotation="0 -90 0"
+                    sound="src:#click-se; positional:false; on: click;">
+                    <a-plane draw-text="text:開始體驗; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane>   
+
+            <a-plane color="#0f0" position="0 0 12" raycastable="true"
+                    change-scene="event: click; to: #scene2; fadePanel: #fadePanel;"
+                    fuse-button="color: #64363C; barColor:#64363C; fuseTimeout: 1000;" 
+                    width="3"  raycastable="true"
+                    rotation="0 -180 0"
+                    sound="src:#click-se; positional:false; on: click;">
+                    <a-plane draw-text="text:開始體驗; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane>
+            
+        </a-plane>
+        </a-entity>
+
+        <a-entity
+            id="scene2" 
+            scene visible="false"
+        >
+            <a-videosphere src="#bloodv"></a-videosphere>
+            <!-- <a-sky src=#blood></a-sky> -->
+            <a-plane color="#0f0" position="0 1.6 -12" raycastable="true"
+                    change-scene="event: click; to: #scene3; fadePanel: #fadePanel;"
+                    fuse-button="color: #64363C; barColor:#64363C; fuseTimeout: 1000;" 
+                    width="3"  raycastable="true"
+                    audiohandler1
+                    sound="src:#click-se; positional:false; on: click;">
+                    <a-plane draw-text="text:離開母體; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane>
+        </a-entity>
+
+        <a-entity id="scene3" scene visible="false">
+            <a-sky src=#babyhood  ></a-sky>
+            <a-plane color="#0f0" position="0 2.6 -12" raycastable="true"
+                    change-scene="event: click; to: #scene4; fadePanel: #fadePanel;"
+                    fuse-button="color: #64363C; barColor:#64363C; fuseTimeout: 1000;" 
+                    width="3"  raycastable="true"
+                    audiohandler2
+                    sound="src:#click-se; positional:false; on: click;">
+                    <a-plane draw-text="text:成長; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane>
+            <!-- <a-plane color="#0f0" position="3 0 -8" raycastable="true"
+                    rotation="0 --20 0"
+                    change-scene="event: click; to: #scene4; fadePanel: #fadePanel;"
+                    fuse-button="color: #64363C; barColor:#64363C; fuseTimeout: 1000;" 
+                    width="3"  raycastable="true"
+                    audiohandler2
+                    sound="src:#click-se; positional:false; on: click;">
+                    <a-plane draw-text="text:成長; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane>
+            <a-plane color="#0f0" position="-3 0 -8" raycastable="true"
+                    rotation="0 20 0"
+                    change-scene="event: click; to: #scene4; fadePanel: #fadePanel;"
+                    fuse-button="color: #64363C; barColor:#64363C; fuseTimeout: 1000;" 
+                    width="3"  raycastable="true"
+                    audiohandler2
+                    sound="src:#click-se; positional:false; on: click;">
+                    <a-plane draw-text="text:成長; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane>
+            <a-plane color="#0f0" position="7 0 -7" raycastable="true"
+                    rotation="0 -45 0"
+                    change-scene="event: click; to: #scene4; fadePanel: #fadePanel;"
+                    fuse-button="color: #64363C; barColor:#64363C; fuseTimeout: 1000;" 
+                    width="3"  raycastable="true"
+                    audiohandler2
+                    sound="src:#click-se; positional:false; on: click;">
+                    <a-plane draw-text="text:成長; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane> -->
+
+
+        </a-entity>
+
+        <a-entity id="scene4" scene visible="false" look>
+            <a-sky color="#000"></a-sky>
+
+        <a-plane color="#0f0" position="0 3 -3" raycastable="true"
+            change-scene="event: click; to: #scene1; fadePanel: #fadePanel;"
+            fuse-button="color: #64363C; barColor:#64363C; fuseTimeout: 1000;" 
+            width="3"  raycastable="true"
+            audiohandler3
+            sound="src:#click-se; positional:false; on: click;">
+            <a-plane draw-text="text:我懂了！; color: #fff" position="0 0 0.02"></a-plane>
+        </a-plane>
+
+        </a-entity>
+
+    </a-scene>
+</body>
+
+</html>
